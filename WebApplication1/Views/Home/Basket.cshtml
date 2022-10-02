@@ -1,0 +1,40 @@
+﻿@model List<ProductModel>
+
+@{
+    ViewData["Title"] = "Sepetim";
+}
+<h1>@ViewData["Title"]</h1>
+@if (!Model.Any())
+{
+    <p>Sepetinizde ürün bulunmamaktadır.</p>
+}else
+{
+    <div class="">
+        <ul class="list-group">
+
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item">
+                    <span>
+                        @item.Name : <span>@item.Price</span>
+                    </span>
+                    <button id="button_@item.Id" type="button" class="btn btn-light" style="float:right" onclick="RemoveBasket('@item.Id')">Sepetten Çıkart</button>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+<script>
+    function RemoveBasket(id) {
+        $.post("/Home/AddOrRemoveBasket",
+            {
+                id: id,
+            },
+            function (result) {
+                if(!result){
+                    location.reload();
+                }
+            });
+    }
+</script>

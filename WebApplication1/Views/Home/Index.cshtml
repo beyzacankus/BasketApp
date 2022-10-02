@@ -1,0 +1,36 @@
+﻿@model List<ProductModel>
+@{
+    ViewData["Title"] = "Home Page";
+    List<string> selectedProductIds = (List<string>)ViewBag.SelectedProductIds ?? new List<string>();
+}
+
+<div class="">
+    <ul class="list-group">
+
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                <span>
+                    @item.Name : <span>@item.Price</span>
+                </span>
+                <button id="button_@item.Id" type="button" class="btn btn-light" style="float:right" onclick="AddOrRemoveBasket('@item.Id')">@(selectedProductIds.Contains(item.Id) ? Html.Raw("Sepetten Çıkart") : Html.Raw("Sepette Ekle"))</button>
+            </li>
+        }
+    </ul>
+</div>
+
+<script>
+    function AddOrRemoveBasket(id){
+        $.post("/Home/AddOrRemoveBasket",
+            {
+                id: id,
+            },
+            function (result) {
+                if(result){
+                    $("#button_" + id).html("Sepetten Çıkart");
+                }else{
+                    $("#button_" + id).html("Sepete Ekle");
+                }
+            });
+    }
+</script>
